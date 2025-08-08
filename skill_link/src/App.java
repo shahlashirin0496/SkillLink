@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 import javax.swing.JFrame;
 public class App {
 
@@ -5,6 +7,9 @@ public class App {
         JFrame obj = new JFrame("skill link");
  
         obj.setSize(400,400);
+        
+        
+        obj.getContentPane().setBackground(Color.GRAY);
         obj.setVisible(true);
         obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
