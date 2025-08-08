@@ -6,6 +6,7 @@ public class App {
  
         obj.setSize(400,400);
         obj.setVisible(true);
+        obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         
     }
