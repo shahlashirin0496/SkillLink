@@ -70,7 +70,7 @@ class LoginPage extends JFrame {
         String password = new String(passwordField.getPassword());
 
         try (Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/skilllink?useSSL=false&serverTimezone=UTC",
+                "jdbc:mysql://localhost:3306/skilllink",
                 "root",
                 "Kochu");
              PreparedStatement ps = con.prepareStatement("SELECT name FROM users WHERE username=? AND password=?")) {
