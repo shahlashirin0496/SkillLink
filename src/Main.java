@@ -446,6 +446,119 @@ class CompanyDashboard extends JFrame {
         setVisible(true);
     }
 }
+// ====================== POST JOB ======================
+class PostJob extends JFrame {
+    JTextField titleField;
+    JTextArea descArea;
+    int companyId;
+
+    public PostJob(int companyId) {
+        super("Post Job");
+        this.companyId = companyId;
+        setSize(400, 300);
+        setLayout(null);
+
+        JLabel titleLbl = new JLabel("Job Title:");
+        titleLbl.setBounds(50, 50, 100, 25);
+        add(titleLbl);
+
+        titleField = new JTextField();
+        titleField.setBounds(150, 50, 180, 25);
+        add(titleField);
+
+        JLabel descLbl = new JLabel("Description:");
+        descLbl.setBounds(50, 100, 100, 25);
+        add(descLbl);
+
+        descArea = new JTextArea();
+        descArea.setBounds(150, 100, 180, 80);
+        add(descArea);
+
+        JButton postBtn = new JButton("Post");
+        postBtn.setBounds(150, 200, 100, 30);
+        postBtn.addActionListener(e -> postJob());
+        add(postBtn);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private void postJob() {
+        try (Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/skilllink", "root", "Kochu");
+             PreparedStatement ps = con.prepareStatement(
+                     "INSERT INTO jobs (company_id, title, description) VALUES (?, ?, ?)")) {
+
+            ps.setInt(1, companyId);
+            ps.setString(2, titleField.getText());
+            ps.setString(3, descArea.getText());
+            ps.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Job posted!");
+            dispose();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+}
+
+// ====================== VIEW APPLICATIONS ======================
+class ViewApplications extends JFrame {
+    int companyId;
+    DefaultTableModel tableModel = new DefaultTableModel(new String[]{"App ID","Student","Mobile","Job","Status"}, 0);
+    JTable table = new JTable(tableModel);
+
+    public ViewApplications(int companyId) {
+        super("Applications Received");
+        this.companyId = companyId;
+        setSize(700, 400);
+        setLayout(new BorderLayout());
+
+        loadApplications();
+        add(new JScrollPane(table), BorderLayout.CENTER);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private void loadApplications() {
+        tableModel.setRowCount(0); // clear old entries
+        try (Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/skilllink", "root", "Kochu");
+             PreparedStatement ps = con.prepareStatement(
+                     "SELECT a.id, u.name, u.mobile, j.title, a.status " +
+                             "FROM applications a " +
+                             "JOIN users u ON a.user_id = u.id " +
+                             "JOIN jobs j ON a.job_id = j.id " +
+                             "JOIN companies c ON j.company_id = c.id " +
+                             "WHERE c.id = ?")) {
+
+            ps.setInt(1, companyId);
+            ResultSet rs = ps.executeQuery();
+
+            boolean hasResults = false;
+            while (rs.next()) {
+                hasResults = true;
+                tableModel.addRow(new Object[]{
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("mobile"),
+                        rs.getString("title"),
+                        rs.getString("status")
+                });
+            }
+
+            if (!hasResults) {
+                tableModel.addRow(new Object[]{"-", "No applications found", "-", "-", "-"});
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            tableModel.addRow(new Object[]{"-", "Database error: "+ex.getMessage(), "-", "-", "-"});
+        }
+    }
+}
 
 
 
