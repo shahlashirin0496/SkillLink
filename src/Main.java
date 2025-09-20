@@ -114,6 +114,94 @@ class StudentLogin extends JFrame {
         }
     }
 }
+// ====================== STUDENT REGISTER ======================
+class StudentRegister extends JFrame {
+    JTextField nameField, usernameField, interestField, mobileField;
+    JPasswordField passwordField;
+
+    public StudentRegister() {
+        super("Student Register");
+        setSize(400, 450);
+        setLayout(null);
+
+        JLabel nameLabel = new JLabel("Name:");
+        nameLabel.setBounds(50, 50, 100, 25);
+        add(nameLabel);
+
+        nameField = new JTextField();
+        nameField.setBounds(150, 50, 180, 25);
+        add(nameField);
+
+        JLabel interestLabel = new JLabel("Field of Interest:");
+        interestLabel.setBounds(50, 100, 120, 25);
+        add(interestLabel);
+
+        interestField = new JTextField();
+        interestField.setBounds(150, 100, 180, 25);
+        add(interestField);
+
+        JLabel mobileLabel = new JLabel("Mobile No:");
+        mobileLabel.setBounds(50, 150, 100, 25);
+        add(mobileLabel);
+
+        mobileField = new JTextField();
+        mobileField.setBounds(150, 150, 180, 25);
+        add(mobileField);
+
+        JLabel userLabel = new JLabel("Username:");
+        userLabel.setBounds(50, 200, 100, 25);
+        add(userLabel);
+
+        usernameField = new JTextField();
+        usernameField.setBounds(150, 200, 180, 25);
+        add(usernameField);
+
+        JLabel passLabel = new JLabel("Password:");
+        passLabel.setBounds(50, 250, 100, 25);
+        add(passLabel);
+
+        passwordField = new JPasswordField();
+        passwordField.setBounds(150, 250, 180, 25);
+        add(passwordField);
+
+        JButton registerBtn = new JButton("Register");
+        registerBtn.setBounds(150, 300, 100, 30);
+        registerBtn.addActionListener(e -> register());
+        add(registerBtn);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private void register() {
+        String name = nameField.getText();
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+        String interest = interestField.getText();
+        String mobile = mobileField.getText();
+
+        try (Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/skilllink", "root", "Kochu");
+             PreparedStatement ps = con.prepareStatement(
+                     "INSERT INTO users (name, username, password, role, extra_info, mobile) VALUES (?, ?, ?, 'Student', ?, ?)")) {
+
+            ps.setString(1, name);
+            ps.setString(2, username);
+            ps.setString(3, password);
+            ps.setString(4, interest);
+            ps.setString(5, mobile);
+            ps.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Registered successfully!");
+            dispose();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error registering student: " + ex.getMessage());
+        }
+    }
+}
+
 
 
 
