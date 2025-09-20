@@ -1,11 +1,9 @@
-
-// ====================== STUDENT PORTAL ======================
-class StudentMainMenu extendsimport javax.swing.*;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-        import java.sql.*;
+import java.sql.*;
 
-
+// ====================== MAIN MENU ======================
 public class Main extends JFrame {
     public Main() {
         super("SkillLink Portal");
@@ -32,7 +30,9 @@ public class Main extends JFrame {
         new Main();
     }
 }
-JFrame {
+
+// ====================== STUDENT PORTAL ======================
+class StudentMainMenu extends JFrame {
     public StudentMainMenu() {
         super("Student Portal");
         setSize(400, 300);
