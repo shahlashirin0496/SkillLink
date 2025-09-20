@@ -237,6 +237,28 @@ class JobList extends JFrame {
             ex.printStackTrace();
         }
     }
+    private void applyJob() {
+        String selected = jobList.getSelectedValue();
+        if (selected == null) return;
+        int jobId = Integer.parseInt(selected.split(" - ")[0]);
+
+        try (Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/skilllink", "root", "Kochu");
+             PreparedStatement ps = con.prepareStatement(
+                     "INSERT INTO applications (job_id, user_id) VALUES (?, ?)")) {
+
+            ps.setInt(1, jobId);
+            ps.setInt(2, studentId);
+            ps.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Applied successfully!");
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error applying: " + ex.getMessage());
+        }
+    }
+}
 
 
 
