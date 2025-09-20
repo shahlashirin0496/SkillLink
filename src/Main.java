@@ -201,6 +201,43 @@ class StudentRegister extends JFrame {
         }
     }
 }
+// ====================== JOB LIST (Student View) ======================
+class JobList extends JFrame {
+    int studentId;
+    DefaultListModel<String> model = new DefaultListModel<>();
+    JList<String> jobList = new JList<>(model);
+
+    public JobList(int studentId) {
+        super("Available Jobs");
+        this.studentId = studentId;
+        setSize(500, 300);
+        setLayout(new BorderLayout());
+
+        loadJobs();
+        add(new JScrollPane(jobList), BorderLayout.CENTER);
+
+        JButton applyBtn = new JButton("Apply");
+        applyBtn.addActionListener(e -> applyJob());
+        add(applyBtn, BorderLayout.SOUTH);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private void loadJobs() {
+        try (Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/skilllink", "root", "Kochu");
+             Statement st = con.createStatement();
+             ResultSet rs = st.executeQuery("SELECT id, title FROM jobs")) {
+
+            while (rs.next()) {
+                model.addElement(rs.getInt("id") + " - " + rs.getString("title"));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
 
 
