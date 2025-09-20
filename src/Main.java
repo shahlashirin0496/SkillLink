@@ -51,4 +51,40 @@ JFrame {
         setVisible(true);
     }
 }
+// ====================== STUDENT LOGIN ======================
+class StudentLogin extends JFrame {
+    JTextField usernameField;
+    JPasswordField passwordField;
+
+    public StudentLogin() {
+        super("Student Login");
+        setSize(400, 250);
+        setLayout(null);
+
+        JLabel userLabel = new JLabel("Username:");
+        userLabel.setBounds(50, 50, 100, 25);
+        add(userLabel);
+
+        usernameField = new JTextField();
+        usernameField.setBounds(150, 50, 180, 25);
+        add(usernameField);
+
+        JLabel passLabel = new JLabel("Password:");
+        passLabel.setBounds(50, 100, 100, 25);
+        add(passLabel);
+
+        passwordField = new JPasswordField();
+        passwordField.setBounds(150, 100, 180, 25);
+        add(passwordField);
+
+        JButton loginBtn = new JButton("Login");
+        loginBtn.setBounds(150, 150, 100, 30);
+        loginBtn.addActionListener(e -> login());
+        add(loginBtn);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+
 
