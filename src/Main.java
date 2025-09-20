@@ -86,5 +86,34 @@ class StudentLogin extends JFrame {
         setVisible(true);
     }
 
+    private void login() {
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+
+        try (Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/skilllink", "root", "Kochu");
+             PreparedStatement ps = con.prepareStatement(
+                     "SELECT id, name FROM users WHERE username=? AND password=?")) {
+
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int studentId = rs.getInt("id");
+                String name = rs.getString("name");
+                JOptionPane.showMessageDialog(this, "Welcome " + name);
+                new JobList(studentId);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid credentials");
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+}
+
 
 
