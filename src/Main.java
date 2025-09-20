@@ -259,6 +259,193 @@ class JobList extends JFrame {
         }
     }
 }
+// ====================== COMPANY PORTAL ======================
+class CompanyMainMenu extends JFrame {
+    public CompanyMainMenu() {
+        super("Company Portal");
+        setSize(400, 300);
+        setLayout(null);
+
+        JButton loginBtn = new JButton("Login");
+        loginBtn.setBounds(120, 50, 150, 30);
+        loginBtn.addActionListener(e -> new CompanyLogin());
+
+        JButton registerBtn = new JButton("Register");
+        registerBtn.setBounds(120, 100, 150, 30);
+        registerBtn.addActionListener(e -> new CompanyRegister());
+
+        add(loginBtn);
+        add(registerBtn);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+}
+
+// ====================== COMPANY LOGIN ======================
+class CompanyLogin extends JFrame {
+    JTextField usernameField;
+    JPasswordField passwordField;
+
+    public CompanyLogin() {
+        super("Company Login");
+        setSize(400, 250);
+        setLayout(null);
+
+        JLabel userLabel = new JLabel("Username:");
+        userLabel.setBounds(50, 50, 100, 25);
+        add(userLabel);
+
+        usernameField = new JTextField();
+        usernameField.setBounds(150, 50, 180, 25);
+        add(usernameField);
+
+        JLabel passLabel = new JLabel("Password:");
+        passLabel.setBounds(50, 100, 100, 25);
+        add(passLabel);
+
+        passwordField = new JPasswordField();
+        passwordField.setBounds(150, 100, 180, 25);
+        add(passwordField);
+
+        JButton loginBtn = new JButton("Login");
+        loginBtn.setBounds(150, 150, 100, 30);
+        loginBtn.addActionListener(e -> login());
+        add(loginBtn);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private void login() {
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+
+        try (Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/skilllink", "root", "Kochu");
+             PreparedStatement ps = con.prepareStatement(
+                     "SELECT id, name FROM companies WHERE username=? AND password=?")) {
+
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int companyId = rs.getInt("id");
+                String name = rs.getString("name");
+                JOptionPane.showMessageDialog(this, "Welcome " + name);
+                new CompanyDashboard(companyId);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid credentials");
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+}
+
+// ====================== COMPANY REGISTER ======================
+class CompanyRegister extends JFrame {
+    JTextField nameField, usernameField, industryField;
+    JPasswordField passwordField;
+
+    public CompanyRegister() {
+        super("Company Register");
+        setSize(400, 350);
+        setLayout(null);
+
+        JLabel nameLabel = new JLabel("Company Name:");
+        nameLabel.setBounds(50, 50, 120, 25);
+        add(nameLabel);
+
+        nameField = new JTextField();
+        nameField.setBounds(180, 50, 150, 25);
+        add(nameField);
+
+        JLabel indLabel = new JLabel("Industry:");
+        indLabel.setBounds(50, 100, 120, 25);
+        add(indLabel);
+
+        industryField = new JTextField();
+        industryField.setBounds(180, 100, 150, 25);
+        add(industryField);
+
+        JLabel userLabel = new JLabel("Username:");
+        userLabel.setBounds(50, 150, 120, 25);
+        add(userLabel);
+
+        usernameField = new JTextField();
+        usernameField.setBounds(180, 150, 150, 25);
+        add(usernameField);
+
+        JLabel passLabel = new JLabel("Password:");
+        passLabel.setBounds(50, 200, 120, 25);
+        add(passLabel);
+
+        passwordField = new JPasswordField();
+        passwordField.setBounds(180, 200, 150, 25);
+        add(passwordField);
+
+        JButton regBtn = new JButton("Register");
+        regBtn.setBounds(150, 250, 100, 30);
+        regBtn.addActionListener(e -> register());
+        add(regBtn);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    private void register() {
+        String name = nameField.getText();
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+        String industry = industryField.getText();
+
+        try (Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/skilllink", "root", "Kochu");
+             PreparedStatement ps = con.prepareStatement(
+                     "INSERT INTO companies (name, username, password, industry) VALUES (?, ?, ?, ?)")) {
+
+            ps.setString(1, name);
+            ps.setString(2, username);
+            ps.setString(3, password);
+            ps.setString(4, industry);
+            ps.executeUpdate();
+
+            JOptionPane.showMessageDialog(this, "Company registered!");
+            dispose();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+}
+
+// ====================== COMPANY DASHBOARD ======================
+class CompanyDashboard extends JFrame {
+    int companyId;
+
+    public CompanyDashboard(int companyId) {
+        super("Company Dashboard");
+        this.companyId = companyId;
+        setSize(600, 400);
+        setLayout(new FlowLayout());
+
+        JButton postJobBtn = new JButton("Post Job");
+        postJobBtn.addActionListener(e -> new PostJob(companyId));
+
+        JButton viewAppsBtn = new JButton("View Applications");
+        viewAppsBtn.addActionListener(e -> new ViewApplications(companyId));
+
+        add(postJobBtn);
+        add(viewAppsBtn);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+}
 
 
 
