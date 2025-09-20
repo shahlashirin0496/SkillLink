@@ -30,3 +30,25 @@ public class Main extends JFrame {
         new Main();
     }
 }
+JFrame {
+    public StudentMainMenu() {
+        super("Student Portal");
+        setSize(400, 300);
+        setLayout(null);
+
+        JButton loginBtn = new JButton("Login");
+        loginBtn.setBounds(120, 50, 150, 30);
+        loginBtn.addActionListener(e -> new StudentLogin());
+
+        JButton registerBtn = new JButton("Register");
+        registerBtn.setBounds(120, 100, 150, 30);
+        registerBtn.addActionListener(e -> new StudentRegister());
+
+        add(loginBtn);
+        add(registerBtn);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+}
+
