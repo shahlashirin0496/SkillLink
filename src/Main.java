@@ -1,7 +1,9 @@
-import javax.swing.*;
+
+// ====================== STUDENT PORTAL ======================
+class StudentMainMenu extendsimport javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.sql.*;
+        import java.sql.*;
 
 
 public class Main extends JFrame {
@@ -51,6 +53,7 @@ JFrame {
         setVisible(true);
     }
 }
+
 // ====================== STUDENT LOGIN ======================
 class StudentLogin extends JFrame {
     JTextField usernameField;
@@ -114,6 +117,7 @@ class StudentLogin extends JFrame {
         }
     }
 }
+
 // ====================== STUDENT REGISTER ======================
 class StudentRegister extends JFrame {
     JTextField nameField, usernameField, interestField, mobileField;
@@ -201,6 +205,7 @@ class StudentRegister extends JFrame {
         }
     }
 }
+
 // ====================== JOB LIST (Student View) ======================
 class JobList extends JFrame {
     int studentId;
@@ -237,6 +242,7 @@ class JobList extends JFrame {
             ex.printStackTrace();
         }
     }
+
     private void applyJob() {
         String selected = jobList.getSelectedValue();
         if (selected == null) return;
@@ -259,6 +265,7 @@ class JobList extends JFrame {
         }
     }
 }
+
 // ====================== COMPANY PORTAL ======================
 class CompanyMainMenu extends JFrame {
     public CompanyMainMenu() {
@@ -446,6 +453,7 @@ class CompanyDashboard extends JFrame {
         setVisible(true);
     }
 }
+
 // ====================== POST JOB ======================
 class PostJob extends JFrame {
     JTextField titleField;
@@ -559,9 +567,3 @@ class ViewApplications extends JFrame {
         }
     }
 }
-
-
-
-
-
-
